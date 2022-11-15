@@ -1,7 +1,8 @@
 import { useGate } from 'effector-react'
-import { SettingsGate } from './models/settings'
+import { SettingsGate } from '../models/settings'
 
-function App() {
+
+export function App() {
   useGate(SettingsGate)
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-sky-700 text-white">
@@ -10,4 +11,3 @@ function App() {
   )
 }
 
-export default App
