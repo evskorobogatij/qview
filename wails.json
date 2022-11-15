@@ -1,0 +1,18 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "qview",
+  "outputfilename": "qview",
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "info":{
+    "productName": "Утилита удаленного подключения",
+    "productVersion": "0.1.0.0",
+    "copyright": "© 2022 @ev_nixman"
+  },
+  "author": {
+    "name": "Скоробогатый Евгений",
+    "email": "evskorobogatij@gmail.com"
+  }
+}
