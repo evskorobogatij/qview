@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"fmt"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -15,6 +16,11 @@ func main() {
 	// Create an instance of the app structure
 	app := NewApp()
 
+	settings := loadConfig()
+	fmt.Printf("DATA URL IS %s \n", settings.Url)
+
+	app.settings = settings
+
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:  "Утилита удаленного подключения",
@@ -27,6 +33,7 @@ func main() {
 		OnStartup:        app.startup,
 		Bind: []interface{}{
 			app,
+			&Settings{},
 		},
 	})
 

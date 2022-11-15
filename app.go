@@ -6,7 +6,8 @@ import (
 
 // App struct
 type App struct {
-	ctx context.Context
+	ctx      context.Context
+	settings *Settings
 }
 
 // NewApp creates a new App application struct
@@ -18,4 +19,8 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+}
+
+func (a *App) LoadDataUrl() string {
+	return a.settings.Url
 }
