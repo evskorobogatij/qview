@@ -4,6 +4,7 @@ import { App } from './app'
 
 import './style.css'
 
+import './models/init'
 
 const container = document.getElementById('root')
 
