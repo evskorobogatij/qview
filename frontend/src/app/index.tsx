@@ -1,16 +1,15 @@
 import { useGate } from 'effector-react'
+import { ComputersList } from '../components/ComputersList'
 import { Search } from '../components/Search'
 import { SettingsGate } from '../models/settings'
 
 export function App() {
   useGate(SettingsGate)
   return (
-    <div className="flex h-screen w-screen flex-col gap-2 bg-slate-100">
+    <div className="flex h-screen max-h-screen w-screen flex-col bg-slate-100">
       <Search />
 
-      
-
-      <div className="text-3xl font-bold m-4 ">Утилита удаленного подключения</div>
+      <ComputersList />
     </div>
   )
 }
