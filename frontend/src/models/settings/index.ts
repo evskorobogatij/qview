@@ -10,5 +10,4 @@ export const loadSettingsFx = createEffect(async () => {
   return data
 })
 
-
 export const SettingsGate = createGate()

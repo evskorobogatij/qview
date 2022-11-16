@@ -18,8 +18,10 @@ func main() {
 
 	settings := loadConfig()
 	fmt.Printf("DATA URL IS %s \n", settings.Url)
-
 	app.settings = settings
+
+	computer := NewCmp()
+	computer.settings = settings
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -34,6 +36,8 @@ func main() {
 		Bind: []interface{}{
 			app,
 			&Settings{},
+			computer,
+			&ComputerItem{},
 		},
 	})
 
