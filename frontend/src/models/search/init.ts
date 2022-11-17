@@ -1,5 +1,13 @@
 import { sample } from 'effector'
-import { $search, performSearch, searchChanged, searchFx } from '.'
+import {
+  $findedComputers,
+  $search,
+  $searchRegExp,
+  performSearch,
+  searchChanged,
+  searchFx,
+} from '.'
+import { $computers } from './../computers'
 
 sample({
   clock: searchChanged,
@@ -7,7 +15,18 @@ sample({
 })
 
 sample({
-  clock: performSearch,
-  source: $search,
+  clock: [performSearch, $computers.updates],
+  source: { search: $search, computers: $computers },
   target: searchFx,
+})
+
+sample({
+  clock: searchFx.doneData,
+  target: $findedComputers,
+})
+
+sample({
+  clock: performSearch,
+  fn: (search) => new RegExp(search, 'gi'),
+  target: $searchRegExp,
 })
