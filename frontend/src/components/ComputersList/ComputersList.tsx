@@ -1,11 +1,12 @@
 import { useStore } from 'effector-react'
 import { useState } from 'react'
 import { clsx } from 'clsx'
-import { $computers } from '../../models/computers'
+import { $findedComputers, $searchRegExp } from '../../models/search'
 
 export const ComputersList = (): JSX.Element => {
-  const computers = useStore($computers)
+  const computers = useStore($findedComputers)
   const [curretPC, setCurrentPC] = useState<string>('')
+  const searchRegExp = useStore($searchRegExp)
   return (
     <>
       <div className="relative m-2 h-fit max-w-full overflow-x-auto overscroll-y-auto rounded-lg border-2 border-gray-300 shadow-md">
@@ -72,11 +73,46 @@ export const ComputersList = (): JSX.Element => {
                 onMouseEnter={() => setCurrentPC(cmp.id)}
                 onMouseLeave={() => setCurrentPC('')}
               >
-                <td className="sticky z-50 py-2 px-4">{cmp.node_name}</td>
-                <td className="py-2 px-4">{cmp.serialnumber}</td>
-                <td className="py-2 px-4">{cmp.ip}</td>
+                <td className="sticky z-50 py-2 px-4">
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: cmp.node_name.replace(
+                        searchRegExp,
+                        '<mark class="bg-blue-500 text-white">$&</mark>'
+                      ),
+                    }}
+                  ></span>
+                  {}
+                </td>
+                <td className="py-2 px-4">
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: cmp.serialnumber.replace(
+                        searchRegExp,
+                        '<mark class="bg-blue-500 text-white">$&</mark>'
+                      ),
+                    }}
+                  />
+                </td>
+                <td className="py-2 px-4">
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: cmp.ip.replace(
+                        searchRegExp,
+                        '<mark class="bg-blue-500 text-white">$&</mark>'
+                      ),
+                    }}
+                  />
+                </td>
                 <td className="text-ellipsis whitespace-nowrap py-2 px-4">
-                  {cmp.fio_user}
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: cmp.fio_user.replace(
+                        searchRegExp,
+                        '<mark class="bg-blue-500 text-white">$&</mark>'
+                      ),
+                    }}
+                  />
                 </td>
                 <td className="py-2 px-4">{cmp.user_phone}</td>
                 <td className="py-2 px-4">{cmp.department}</td>
