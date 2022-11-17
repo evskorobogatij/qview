@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -45,8 +44,6 @@ func (cmp *Computer) LoadComputers() []ComputerItem {
 	if err != nil {
 		log.Println(err)
 	}
-
-	fmt.Println(string(body))
 
 	computers := []ComputerItem{}
 	json.Unmarshal(body, &computers)
