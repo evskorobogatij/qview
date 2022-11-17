@@ -1,12 +1,17 @@
-import { useStore } from 'effector-react'
-import { useState } from 'react'
+import { useStore, useEvent } from 'effector-react'
+import { useState, useCallback } from 'react'
 import { clsx } from 'clsx'
 import { $findedComputers, $searchRegExp } from '../../models/search'
+import { connectBySSH, connectByVNC } from '../../models/connections'
 
 export const ComputersList = (): JSX.Element => {
   const computers = useStore($findedComputers)
   const [curretPC, setCurrentPC] = useState<string>('')
   const searchRegExp = useStore($searchRegExp)
+
+  const handleConnectByVNC = useEvent(connectByVNC)
+  const handleConnectBySSH = useEvent(connectBySSH)
+
   return (
     <>
       <div className="relative m-2 h-fit max-w-full overflow-x-auto overscroll-y-auto rounded-lg border-2 border-gray-300 shadow-md">
@@ -124,6 +129,7 @@ export const ComputersList = (): JSX.Element => {
                         'rounded-lg border border-green-800 bg-white px-3 py-2 text-xs font-medium text-green-800 transition duration-300 ease-in-out hover:bg-green-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
                         curretPC === cmp.id ? 'opacity-100' : 'opacity-0'
                       )}
+                      onClick={() => handleConnectBySSH(cmp.ip)}
                     >
                       SSH
                     </button>
@@ -133,6 +139,7 @@ export const ComputersList = (): JSX.Element => {
                         'rounded-lg border border-blue-800 bg-white px-3 py-2 text-xs font-medium text-blue-800 transition duration-300 ease-in-out hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800',
                         curretPC === cmp.id ? 'opacity-100' : 'opacity-0'
                       )}
+                      onClick={() => handleConnectByVNC(cmp.ip)}
                     >
                       VNC
                     </button>

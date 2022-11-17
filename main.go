@@ -23,6 +23,9 @@ func main() {
 	computer := NewCmp()
 	computer.settings = settings
 
+	connections := &Connections{}
+	connections.settings = settings
+
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:  "Утилита удаленного подключения",
@@ -38,6 +41,7 @@ func main() {
 			&Settings{},
 			computer,
 			&ComputerItem{},
+			connections,
 		},
 	})
 
