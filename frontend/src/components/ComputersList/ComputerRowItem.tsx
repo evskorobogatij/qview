@@ -1,6 +1,6 @@
-import { useStore } from 'effector-react'
+import { useStore, useEvent } from 'effector-react'
 import { main } from '../../../wailsjs/go/models'
-import { $vncList } from '../../models/ports'
+import { $vncList, checkVNC } from '../../models/ports'
 import { $searchRegExp } from '../../models/search'
 import { SSHBtn } from '../SSHBtn'
 import { VNCBtn } from '../VNCBtn'
@@ -16,6 +16,7 @@ interface ComputerRowItemProps extends main.ComputerItem {
 export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
   const vncStatuses = useStore($vncList)
   const searchRegExp = useStore($searchRegExp)
+  const handleCheckVNC = useEvent(checkVNC)
 
   const handleHovered = useCallback(() => cmp.onHovered(cmp.id), [cmp])
   const handleLeave = useCallback(() => cmp.onLeave, [cmp.onLeave])
@@ -83,6 +84,10 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
     [statusesForVNC]
   )
 
+  const onItemClick = useCallback(() => {
+    ipList.forEach((ip) => handleCheckVNC(ip))
+  }, [handleCheckVNC, ipList])
+
   return (
     <>
       <tr
@@ -91,8 +96,8 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
           'z-10 items-center border-b border-slate-400 bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200'
         }
         onMouseEnter={handleHovered}
-        onMouseLeave={handleLeave}
-        // onClick={() => handleCheckVNC(cmp.ip)}
+        onMouseLeave={handleLeave}        
+        onClick={onItemClick}
       >
         <td className="sticky z-50 flex flex-row py-2 px-4">
           <div
