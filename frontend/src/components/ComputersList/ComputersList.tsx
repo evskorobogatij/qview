@@ -1,18 +1,17 @@
-import { useStore, useEvent } from 'effector-react'
-import { useState } from 'react'
-import { $findedComputers, $searchRegExp } from '../../models/search'
-import { VNCBtn } from '../VNCBtn'
-import { SSHBtn } from '../SSHBtn'
-import { $vncList, checkVNC } from '../../models/ports'
-import { clsx } from 'clsx'
+import { useStore } from 'effector-react'
+import { useState, useCallback } from 'react'
+import { $findedComputers } from '../../models/search'
+import { ComputerRowItem } from './ComputerRowItem'
 
 export const ComputersList = (): JSX.Element => {
   const computers = useStore($findedComputers)
   const [curretPC, setCurrentPC] = useState<string>('')
-  const searchRegExp = useStore($searchRegExp)
-  const vncStatuses = useStore($vncList)
 
-  const handleCheckVNC = useEvent(checkVNC)
+  const handleComputerItemHover = useCallback(
+    (id: string) => setCurrentPC(id),
+    []
+  )
+  const handleComputerItemLeave = useCallback(() => setCurrentPC(''), [])
 
   return (
     <>
@@ -72,81 +71,13 @@ export const ComputersList = (): JSX.Element => {
           </thead>
           <tbody className="  bg-slate-200">
             {computers?.map((cmp) => (
-              <tr
+              <ComputerRowItem
                 key={cmp.id}
-                className={
-                  'z-10 items-center border-b border-slate-400 bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200'
-                }
-                onMouseEnter={() => setCurrentPC(cmp.id)}
-                onMouseLeave={() => setCurrentPC('')}
-                onClick={() => handleCheckVNC(cmp.ip)}
-              >
-                <td className="sticky z-50 flex flex-row py-2 px-4">
-                  <div
-                    className={clsx(
-                      'm-2 h-2.5 w-2.5 rounded-2xl ',
-                      vncStatuses.find((item) => item.ip === cmp.ip) !==
-                        undefined
-                        ? vncStatuses.find((item) => item.ip === cmp.ip)
-                          ?.status === 'online'
-                          ? 'bg-green-600'
-                          : 'bg-red-600'
-                        : 'bg-gray-600'
-                    )}
-                  ></div>
-
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: cmp.node_name.replace(
-                        searchRegExp,
-                        '<mark class="bg-blue-500 text-white">$&</mark>'
-                      ),
-                    }}
-                  ></div>
-                  {/* {vncStatuses.findIndex((port) => port.ip === cmp.ip) >= 0 && (
-                    <span>CHECKED</span>
-                  )} */}
-                </td>
-                <td className="py-2 px-4">
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: cmp.serialnumber.replace(
-                        searchRegExp,
-                        '<mark class="bg-blue-500 text-white">$&</mark>'
-                      ),
-                    }}
-                  />
-                </td>
-                <td className="py-2 px-4">
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: cmp.ip.replace(
-                        searchRegExp,
-                        '<mark class="bg-blue-500 text-white">$&</mark>'
-                      ),
-                    }}
-                  />
-                </td>
-                <td className="text-ellipsis whitespace-nowrap py-2 px-4">
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: cmp.fio_user.replace(
-                        searchRegExp,
-                        '<mark class="bg-blue-500 text-white">$&</mark>'
-                      ),
-                    }}
-                  />
-                </td>
-                <td className="py-2 px-4">{cmp.user_phone}</td>
-                <td className="py-2 px-4">{cmp.department}</td>
-                <td className="py-2 px-4">{cmp.room}</td>
-                <td className="py-2 px-4">
-                  <div className="flex gap-2 ">
-                    <SSHBtn ip={cmp.ip} hovered={curretPC === cmp.id} />
-                    <VNCBtn ip={cmp.ip} hovered={curretPC === cmp.id} />
-                  </div>
-                </td>
-              </tr>
+                {...cmp}
+                hovered={curretPC === cmp.id}
+                onHovered={handleComputerItemHover}
+                onLeave={handleComputerItemLeave}
+              />
             ))}
           </tbody>
         </table>
