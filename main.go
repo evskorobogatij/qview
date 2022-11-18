@@ -42,6 +42,7 @@ func main() {
 			computer,
 			&ComputerItem{},
 			connections,
+			&Ports{},
 		},
 	})
 

@@ -1,13 +1,18 @@
-import { useStore } from 'effector-react'
+import { useStore, useEvent } from 'effector-react'
 import { useState } from 'react'
 import { $findedComputers, $searchRegExp } from '../../models/search'
 import { VNCBtn } from '../VNCBtn'
 import { SSHBtn } from '../SSHBtn'
+import { $vncList, checkVNC } from '../../models/ports'
+import { clsx } from 'clsx'
 
 export const ComputersList = (): JSX.Element => {
   const computers = useStore($findedComputers)
   const [curretPC, setCurrentPC] = useState<string>('')
   const searchRegExp = useStore($searchRegExp)
+  const vncStatuses = useStore($vncList)
+
+  const handleCheckVNC = useEvent(checkVNC)
 
   return (
     <>
@@ -70,21 +75,37 @@ export const ComputersList = (): JSX.Element => {
               <tr
                 key={cmp.id}
                 className={
-                  'z-10 border-b border-slate-400 bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200'
+                  'z-10 items-center border-b border-slate-400 bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200'
                 }
                 onMouseEnter={() => setCurrentPC(cmp.id)}
                 onMouseLeave={() => setCurrentPC('')}
+                onClick={() => handleCheckVNC(cmp.ip)}
               >
-                <td className="sticky z-50 py-2 px-4">
-                  <span
+                <td className="sticky z-50 flex flex-row py-2 px-4">
+                  <div
+                    className={clsx(
+                      'm-2 h-2.5 w-2.5 rounded-2xl ',
+                      vncStatuses.find((item) => item.ip === cmp.ip) !==
+                        undefined
+                        ? vncStatuses.find((item) => item.ip === cmp.ip)
+                          ?.status === 'online'
+                          ? 'bg-green-600'
+                          : 'bg-red-600'
+                        : 'bg-gray-600'
+                    )}
+                  ></div>
+
+                  <div
                     dangerouslySetInnerHTML={{
                       __html: cmp.node_name.replace(
                         searchRegExp,
                         '<mark class="bg-blue-500 text-white">$&</mark>'
                       ),
                     }}
-                  ></span>
-                  {}
+                  ></div>
+                  {/* {vncStatuses.findIndex((port) => port.ip === cmp.ip) >= 0 && (
+                    <span>CHECKED</span>
+                  )} */}
                 </td>
                 <td className="py-2 px-4">
                   <span
