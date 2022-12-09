@@ -1,4 +1,5 @@
 import './settings/init'
+import './node_menu/init'
 import './ports/init'
 import './connections/init'
 import './computers/init'

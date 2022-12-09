@@ -1,6 +1,8 @@
 import { useStore } from 'effector-react'
 import { useState, useCallback } from 'react'
+import { $activeVNCMenu } from '../../models/node_menu'
 import { $findedComputers } from '../../models/search'
+import { VNCMenu } from '../VNCMenu'
 import { ComputerRowItem } from './ComputerRowItem'
 
 export const ComputersList = (): JSX.Element => {
@@ -13,6 +15,8 @@ export const ComputersList = (): JSX.Element => {
   )
   const handleComputerItemLeave = useCallback(() => setCurrentPC(''), [])
 
+  const activeVNCMenu = useStore($activeVNCMenu)
+
   return (
     <>
       <div className="relative m-2 h-full max-w-full overflow-x-auto overscroll-y-auto rounded-lg border-2 border-gray-300 shadow-md">
@@ -21,7 +25,7 @@ export const ComputersList = (): JSX.Element => {
             <tr>
               <th
                 scope="col"
-                className="sticky top-0 left-0 flex w-80 bg-slate-200 z-20  whitespace-nowrap  rounded-tl-lg py-4 px-6"
+                className="sticky top-0 left-0 z-20 flex w-80 whitespace-nowrap  rounded-tl-lg  bg-slate-200 py-4 px-6"
               >
                 Имя компьютера
               </th>
@@ -63,7 +67,7 @@ export const ComputersList = (): JSX.Element => {
               </th>
               <th
                 scope="col"
-                className="sticky top-0 right-0 w-96 whitespace-nowrap bg-slate-200 rounded-tr-lg py-4  px-6"
+                className="sticky top-0 right-0 w-96 whitespace-nowrap rounded-tr-lg bg-slate-200 py-4  px-6"
               >
                 Подключения
               </th>
@@ -82,6 +86,8 @@ export const ComputersList = (): JSX.Element => {
           </tbody>
         </table>
       </div>
+
+      {activeVNCMenu && <VNCMenu />}
     </>
   )
 }
