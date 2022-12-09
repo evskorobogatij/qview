@@ -1,7 +1,8 @@
 import { useStore } from 'effector-react'
 import { useState, useCallback } from 'react'
-import { $activeVNCMenu } from '../../models/node_menu'
+import { $activeSSHMenu, $activeVNCMenu } from '../../models/node_menu'
 import { $findedComputers } from '../../models/search'
+import { SSHMenu } from '../SSHMenu'
 import { VNCMenu } from '../VNCMenu'
 import { ComputerRowItem } from './ComputerRowItem'
 
@@ -16,6 +17,7 @@ export const ComputersList = (): JSX.Element => {
   const handleComputerItemLeave = useCallback(() => setCurrentPC(''), [])
 
   const activeVNCMenu = useStore($activeVNCMenu)
+  const activeSSHMenu = useStore($activeSSHMenu)
 
   return (
     <>
@@ -88,6 +90,7 @@ export const ComputersList = (): JSX.Element => {
       </div>
 
       {activeVNCMenu && <VNCMenu />}
+      {activeSSHMenu && <SSHMenu />}
     </>
   )
 }
