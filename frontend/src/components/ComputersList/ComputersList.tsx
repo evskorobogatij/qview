@@ -1,5 +1,7 @@
+import clsx from 'clsx'
 import { useStore } from 'effector-react'
 import { useState, useCallback } from 'react'
+import { useElementInView } from '../../lib/hooks'
 import { $activeSSHMenu, $activeVNCMenu } from '../../models/node_menu'
 import { $findedComputers } from '../../models/search'
 import { SSHMenu } from '../SSHMenu'
@@ -19,11 +21,18 @@ export const ComputersList = (): JSX.Element => {
   const activeVNCMenu = useStore($activeVNCMenu)
   const activeSSHMenu = useStore($activeSSHMenu)
 
+  const { containerRef, isVisible: notStrolled } = useElementInView()
+
   return (
     <>
       <div className="relative m-2 h-full max-w-full overflow-x-auto overscroll-y-auto rounded-lg border-2 border-gray-300 shadow-md">
         <table className="w-full border-collapse border-slate-400  text-sm">
-          <thead className="sticky top-0 z-[100] h-8 rounded-tl-lg rounded-tr-lg bg-slate-200 bg-fixed text-xs uppercase">
+          <thead
+            className={clsx(
+              'sticky top-0 z-[100] h-8 rounded-tl-lg rounded-tr-lg bg-slate-200 bg-fixed text-xs uppercase shadow-slate-500/50 transition-shadow',
+              !notStrolled ? 'shadow-lg' : 'shadow-none'
+            )}
+          >
             <tr>
               <th
                 scope="col"
@@ -76,6 +85,7 @@ export const ComputersList = (): JSX.Element => {
             </tr>
           </thead>
           <tbody className="  bg-slate-200">
+            <div className="h-0 w-full" ref={containerRef} />
             {computers?.map((cmp) => (
               <ComputerRowItem
                 key={cmp.id}
