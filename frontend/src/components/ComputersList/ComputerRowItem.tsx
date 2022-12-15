@@ -11,6 +11,8 @@ interface ComputerRowItemProps extends main.ComputerItem {
   onHovered: (id: string) => void
   onLeave: () => void
   hovered: boolean
+  notScrolledOnLeft: boolean
+  notScrolledOnRight: boolean
 }
 
 export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
@@ -99,7 +101,12 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
         onMouseLeave={handleLeave}
         onClick={onItemClick}
       >
-        <td className="sticky left-0 bg-inherit py-2 px-4 ">
+        <td
+          className={clsx(
+            cmp.notScrolledOnLeft ? '' : 'br',
+            'sticky left-0 bg-inherit py-2 px-4'
+          )}
+        >
           <div className="flex h-full flex-row">
             <div
               className={clsx(
@@ -116,8 +123,8 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
               dangerouslySetInnerHTML={{
                 __html: node_name,
               }}
-            ></div>            
-          </div>          
+            ></div>
+          </div>
         </td>
         <td className="py-2 px-4">
           <span
@@ -143,7 +150,13 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
         <td className="py-2 px-4">{cmp.user_phone}</td>
         <td className="py-2 px-4">{cmp.department}</td>
         <td className="py-2 px-4">{cmp.room}</td>
-        <td className="sticky right-0 bg-inherit py-2 px-4">
+        <div className='w-0' />
+        <td
+          className={clsx(
+            cmp.notScrolledOnRight ? '' : 'bl',
+            'sticky right-0 bg-inherit py-2 px-4'
+          )}
+        >
           <div className="flex gap-2 ">
             <SSHBtn ip={cmp.ip} hovered={cmp.hovered} />
             <VNCBtn ip={cmp.ip} hovered={cmp.hovered} />

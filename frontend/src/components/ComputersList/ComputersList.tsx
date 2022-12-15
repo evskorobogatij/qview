@@ -23,6 +23,11 @@ export const ComputersList = (): JSX.Element => {
 
   const { containerRef, isVisible: notStrolled } = useElementInView()
 
+  const { containerRef: leftRef, isVisible: notScrolledOnLeft } =
+    useElementInView()
+  const { containerRef: rightRef, isVisible: notScrolledOnRight } =
+    useElementInView()
+
   return (
     <>
       <div className="relative m-2 h-full max-w-full overflow-x-auto overscroll-y-auto rounded-lg border-2 border-gray-300 shadow-md">
@@ -40,11 +45,12 @@ export const ComputersList = (): JSX.Element => {
               >
                 Имя компьютера
               </th>
+              <div ref={leftRef} className={'sticky w-0'} />
               <th
                 scope="col"
                 className="sticky top-0 w-80 whitespace-nowrap  py-4  px-6"
               >
-                Серийный номер
+                <div>Серийный номер</div>
               </th>
               <th
                 scope="col"
@@ -76,6 +82,7 @@ export const ComputersList = (): JSX.Element => {
               >
                 Кабинет
               </th>
+              <div ref={rightRef} className={'sticky top-0 w-0'} />
               <th
                 scope="col"
                 className="sticky top-0 right-0 w-96 whitespace-nowrap rounded-tr-lg bg-slate-200 py-4  px-6"
@@ -85,7 +92,7 @@ export const ComputersList = (): JSX.Element => {
             </tr>
           </thead>
           <tbody className="  bg-slate-200">
-            <div className="h-0 w-full" ref={containerRef} />
+            <div className="sticky left-0 h-0" ref={containerRef} />
             {computers?.map((cmp) => (
               <ComputerRowItem
                 key={cmp.id}
@@ -93,6 +100,8 @@ export const ComputersList = (): JSX.Element => {
                 hovered={curretPC === cmp.id}
                 onHovered={handleComputerItemHover}
                 onLeave={handleComputerItemLeave}
+                notScrolledOnLeft={notScrolledOnLeft}
+                notScrolledOnRight={notScrolledOnRight}
               />
             ))}
           </tbody>

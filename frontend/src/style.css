@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .br {
+    box-shadow: inset -1px 0 0 rgb(148 163 184);
+  }
+
+  .bl {
+    box-shadow: inset 1px 0 0 rgb(148 163 184);
+  }
+}
