@@ -2,11 +2,10 @@ import { sample } from 'effector'
 import {
   $vncList,
   checkVNC,
-  checkVNCForAllNodes,
   checkVNCForAllNodesFx,
   checkVNCFx,
 } from '.'
-import { $computers, getComputersFx } from '../computers'
+import { getComputersFx } from '../computers'
 
 sample({
   clock: checkVNC,
@@ -28,14 +27,6 @@ $vncList.watch((list) => console.log('PORT SATETUS', list))
 
 sample({
   clock: getComputersFx.doneData,
-  target: checkVNCForAllNodes,
-})
-
-sample({
-  clock: checkVNCForAllNodes,
-  source: $computers,
-  fn: (computers) => {
-    return computers !== null ? computers.map((cmp) => cmp.ip) : []
-  },
+  fn: (computers) => computers.map((cmp) => cmp.ip),
   target: checkVNCForAllNodesFx,
 })
