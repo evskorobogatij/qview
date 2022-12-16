@@ -61,3 +61,6 @@ export const refreshStatuses = createEvent()
 setInterval(() => refreshStatuses(), 10 * 60 * 1000)
 
 export const $nodesState = createStore<NodesState>([])
+
+export const $availableCount = $nodesState.map(s=>s.filter(v=>v.status==='online').length)
+export const $unavailableCount = $nodesState.map(s=>s.filter(v=>v.status==='offline').length)

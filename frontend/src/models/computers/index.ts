@@ -13,3 +13,5 @@ export const getComputersFx = createEffect(async () => {
 export const $loadingComputers = getComputersFx.pending.map(
   (pending) => pending
 )
+
+export const $nodesCount = $computers.map((s) => (s ? s.length : 0))
