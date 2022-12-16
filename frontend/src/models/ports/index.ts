@@ -57,4 +57,7 @@ export const checkSSHForAllNodesFx = createEffect(
   }
 )
 
+export const refreshStatuses = createEvent()
+setInterval(() => refreshStatuses(), 10 * 60 * 1000)
+
 export const $nodesState = createStore<NodesState>([])

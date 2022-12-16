@@ -11,6 +11,7 @@ import {
   checkVNCForAllNodesFx,
   checkVNCFx,
   NodesState,
+  refreshStatuses,
 } from '.'
 import { $computers, getComputersFx } from '../computers'
 
@@ -85,4 +86,11 @@ sample({
     return list ?? []
   },
   target: $nodesState,
+})
+
+sample({
+  clock: refreshStatuses,
+  source: $computers,
+  fn: (computers) => (computers ? computers.map((cmp) => cmp.ip) : []),
+  target: [checkVNCForAllNodesFx, checkSSHForAllNodesFx],
 })
