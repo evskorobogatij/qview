@@ -1,6 +1,6 @@
 import { useStore, useEvent } from 'effector-react'
 import { main } from '../../../wailsjs/go/models'
-import { $sshList, $vncList, checkSSH, checkVNC } from '../../models/ports'
+import { $nodesState, checkSSH, checkVNC } from '../../models/ports'
 import { $searchRegExp } from '../../models/search'
 import { SSHBtn } from '../SSHBtn'
 import { VNCBtn } from '../VNCBtn'
@@ -16,8 +16,7 @@ interface ComputerRowItemProps extends main.ComputerItem {
 }
 
 export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
-  const vncStatuses = useStore($vncList)
-  const sshStatuses = useStore($sshList)
+  const nodeStates = useStore($nodesState)
   const searchRegExp = useStore($searchRegExp)
   const handleCheckVNC = useEvent(checkVNC)
 
@@ -69,46 +68,12 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
   )
 
   const ipList = useMemo(() => cmp.ip.split(', '), [cmp.ip])
-  const statusesForVNC = useMemo(() => {
-    const d = ipList
-      .map((ip_a) => vncStatuses.find((vnc) => vnc.ip === ip_a))
-      .filter((status) => status !== undefined)
-
-    return d
-  }, [ipList, vncStatuses])
-
-  const vncStatus = useMemo(
-    () =>
-      statusesForVNC.length > 0
-        ? statusesForVNC.find((s) => s?.status === 'online') !== undefined
-          ? 'online'
-          : 'offline'
-        : undefined,
-    [statusesForVNC]
-  )
-
-  const statusesForSSH = useMemo(() => {
-    const d = ipList
-      .map((ip_a) => sshStatuses.find((ssh) => ssh.ip === ip_a))
-      .filter((status) => status !== undefined)
-    return d
-  }, [ipList, sshStatuses])
-
-  const sshStatus = useMemo(
-    () =>
-      statusesForSSH.length > 0
-        ? statusesForSSH.find((s) => s?.status === 'online') !== undefined
-          ? 'online'
-          : 'offline'
-        : undefined,
-    [statusesForSSH]
-  )
 
   const status = useMemo(() => {
-    if (vncStatus === undefined && sshStatus === undefined) return undefined
-    if (vncStatus === 'online' || sshStatus === 'online') return 'online'
-    else return 'offline'
-  }, [sshStatus, vncStatus])
+    const state = nodeStates.find(s=>s.node_name===cmp.node_name)
+    if (state===undefined) return undefined
+    else return state.status
+  }, [cmp.node_name, nodeStates])
 
   const onItemClick = useCallback(() => {
     ipList.forEach((ip) => handleCheckVNC(ip))

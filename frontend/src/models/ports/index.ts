@@ -3,10 +3,16 @@ import { CheckSSH, CheckVNC } from '../../../wailsjs/go/main/Ports'
 
 interface PortStatus {
   ip: string
-  status?: 'online' | 'offine'
+  status?: 'online' | 'offline'
 }
 
 type PortStatuses = Array<PortStatus>
+
+export interface NodeState {
+  node_name: string
+  status: 'online' | 'offline' | undefined
+}
+export type NodesState = Array<NodeState>
 
 export const $vncList = createStore<PortStatuses>([])
 
@@ -17,7 +23,7 @@ export const checkVNCFx = createEffect(async (ip: string) => {
   console.log(res)
   const data: PortStatus = {
     ip,
-    status: res ? 'online' : 'offine',
+    status: res ? 'online' : 'offline',
   }
   return data
 })
@@ -38,13 +44,17 @@ export const checkSSHFx = createEffect(async (ip: string) => {
   const res = await CheckSSH(ip)
   const data: PortStatus = {
     ip,
-    status: res ? 'online' : 'offine',
+    status: res ? 'online' : 'offline',
   }
   return data
 })
 
-export const checkSSHForAllNodesFx = createEffect(async (ips: Array<string>) => {
-  ips.forEach((ip) => {
-    ip.split(', ').forEach((v) => checkSSH(v))
-  })
-})
+export const checkSSHForAllNodesFx = createEffect(
+  async (ips: Array<string>) => {
+    ips.forEach((ip) => {
+      ip.split(', ').forEach((v) => checkSSH(v))
+    })
+  }
+)
+
+export const $nodesState = createStore<NodesState>([])
