@@ -30,8 +30,11 @@ export const ComputersList = (): JSX.Element => {
 
   return (
     <>
-      <div className="relative m-2 h-full max-w-full overflow-x-auto overscroll-y-auto rounded-lg border-2 border-gray-300 shadow-md">
-        <table className="w-full border-collapse border-slate-400  text-sm">
+      <div
+        className="relative m-2 h-full max-w-full overflow-x-auto overscroll-y-auto rounded-lg border-2 border-gray-300 shadow-md 
+      transition-all scrollbar-thin scrollbar-track-slate-300/50 scrollbar-thumb-slate-500 scrollbar-track-rounded-full scrollbar-thumb-rounded-full hover:scrollbar-track-slate-300"
+      >
+        <table className="w-full border-collapse border-slate-400  text-sm ">
           <thead
             className={clsx(
               'sticky top-0 z-[100] h-8 rounded-tl-lg rounded-tr-lg bg-slate-200 bg-fixed text-xs uppercase shadow-slate-500/50 transition-shadow',
