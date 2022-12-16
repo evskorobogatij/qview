@@ -1,6 +1,6 @@
 import { useStore, useEvent } from 'effector-react'
 import { main } from '../../../wailsjs/go/models'
-import { $vncList, checkVNC } from '../../models/ports'
+import { $sshList, $vncList, checkSSH, checkVNC } from '../../models/ports'
 import { $searchRegExp } from '../../models/search'
 import { SSHBtn } from '../SSHBtn'
 import { VNCBtn } from '../VNCBtn'
@@ -17,6 +17,7 @@ interface ComputerRowItemProps extends main.ComputerItem {
 
 export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
   const vncStatuses = useStore($vncList)
+  const sshStatuses = useStore($sshList)
   const searchRegExp = useStore($searchRegExp)
   const handleCheckVNC = useEvent(checkVNC)
 
@@ -86,8 +87,32 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
     [statusesForVNC]
   )
 
+  const statusesForSSH = useMemo(() => {
+    const d = ipList
+      .map((ip_a) => sshStatuses.find((ssh) => ssh.ip === ip_a))
+      .filter((status) => status !== undefined)
+    return d
+  }, [ipList, sshStatuses])
+
+  const sshStatus = useMemo(
+    () =>
+      statusesForSSH.length > 0
+        ? statusesForSSH.find((s) => s?.status === 'online') !== undefined
+          ? 'online'
+          : 'offline'
+        : undefined,
+    [statusesForSSH]
+  )
+
+  const status = useMemo(() => {
+    if (vncStatus === undefined && sshStatus === undefined) return undefined
+    if (vncStatus === 'online' || sshStatus === 'online') return 'online'
+    else return 'offline'
+  }, [sshStatus, vncStatus])
+
   const onItemClick = useCallback(() => {
     ipList.forEach((ip) => handleCheckVNC(ip))
+    ipList.forEach((ip) => checkSSH(ip))
   }, [handleCheckVNC, ipList])
 
   return (
@@ -111,8 +136,8 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
             <div
               className={clsx(
                 'm-2 h-2.5 w-2.5 rounded-2xl ',
-                vncStatus !== undefined
-                  ? vncStatus === 'online'
+                status !== undefined
+                  ? status === 'online'
                     ? 'bg-green-600'
                     : 'bg-red-600'
                   : 'bg-gray-600'
@@ -150,7 +175,7 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
         <td className="py-2 px-4">{cmp.user_phone}</td>
         <td className="py-2 px-4">{cmp.department}</td>
         <td className="py-2 px-4">{cmp.room}</td>
-        <div className='w-0' />
+        <div className="w-0" />
         <td
           className={clsx(
             cmp.notScrolledOnRight ? '' : 'bl',

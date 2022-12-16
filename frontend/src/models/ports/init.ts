@@ -1,6 +1,10 @@
 import { sample } from 'effector'
 import {
+  $sshList,
   $vncList,
+  checkSSH,
+  checkSSHForAllNodesFx,
+  checkSSHFx,
   checkVNC,
   checkVNCForAllNodesFx,
   checkVNCFx,
@@ -23,10 +27,29 @@ sample({
   target: $vncList,
 })
 
-$vncList.watch((list) => console.log('PORT SATETUS', list))
+sample({
+  clock: checkSSH,
+  target: checkSSHFx,
+})
+sample({
+  clock: checkSSHFx.doneData,
+  source: $sshList,
+  fn: (store, port) => {
+    const newStore = store.filter((p) => p.ip !== port.ip)
+    newStore.push(port)
+    return newStore
+  },
+  target: $sshList,
+})
 
 sample({
   clock: getComputersFx.doneData,
   fn: (computers) => computers.map((cmp) => cmp.ip),
   target: checkVNCForAllNodesFx,
+})
+
+sample({
+  clock: getComputersFx.doneData,
+  fn: (computers) => computers.map((cmp) => cmp.ip),
+  target: checkSSHForAllNodesFx,
 })

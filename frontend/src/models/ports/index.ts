@@ -1,5 +1,5 @@
 import { createStore, createEvent, createEffect } from 'effector'
-import { CheckVNC } from '../../../wailsjs/go/main/Ports'
+import { CheckSSH, CheckVNC } from '../../../wailsjs/go/main/Ports'
 
 interface PortStatus {
   ip: string
@@ -31,3 +31,20 @@ export const checkVNCForAllNodesFx = createEffect(
     //
   }
 )
+
+export const $sshList = createStore<PortStatuses>([])
+export const checkSSH = createEvent<string>()
+export const checkSSHFx = createEffect(async (ip: string) => {
+  const res = await CheckSSH(ip)
+  const data: PortStatus = {
+    ip,
+    status: res ? 'online' : 'offine',
+  }
+  return data
+})
+
+export const checkSSHForAllNodesFx = createEffect(async (ips: Array<string>) => {
+  ips.forEach((ip) => {
+    ip.split(', ').forEach((v) => checkSSH(v))
+  })
+})
