@@ -19,6 +19,7 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
   const nodeStates = useStore($nodesState)
   const searchRegExp = useStore($searchRegExp)
   const handleCheckVNC = useEvent(checkVNC)
+  const handleCheckSSH = useEvent(checkSSH)
 
   const handleHovered = useCallback(() => cmp.onHovered(cmp.id), [cmp])
   const handleLeave = useCallback(() => cmp.onLeave, [cmp.onLeave])
@@ -70,15 +71,24 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
   const ipList = useMemo(() => cmp.ip.split(', '), [cmp.ip])
 
   const status = useMemo(() => {
-    const state = nodeStates.find(s=>s.node_name===cmp.node_name)
-    if (state===undefined) return undefined
-    else return state.status
-  }, [cmp.node_name, nodeStates])
+    const state = nodeStates.find(s => s.id === cmp.id)
+    if (state === undefined) return undefined
+    else {
+      if (state.ssh_status === 'online' || state.vnc_status === 'online') {
+        return 'online'
+      }
+      if (state.ssh_status === 'offline' || state.vnc_status === 'offline') {
+        return 'offline'
+      }
+    }
+  }, [cmp.id, nodeStates])
 
   const onItemClick = useCallback(() => {
-    ipList.forEach((ip) => handleCheckVNC(ip))
-    ipList.forEach((ip) => checkSSH(ip))
-  }, [handleCheckVNC, ipList])
+    handleCheckVNC(cmp.id)
+    handleCheckSSH(cmp.id)
+    // ipList.forEach((ip) => handleCheckVNC(ip))
+    // ipList.forEach((ip) => checkSSH(ip))
+  }, [handleCheckVNC, handleCheckSSH, cmp])
 
   return (
     <>
@@ -97,7 +107,7 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
             'sticky left-0 bg-inherit py-2 px-4'
           )}
         >
-          <div className="flex h-full flex-row">
+          <div className="flex h-full flex-row items-center">
             <div
               className={clsx(
                 'm-2 h-2.5 w-2.5 rounded-2xl ',
@@ -114,6 +124,9 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
                 __html: node_name,
               }}
             ></div>
+
+            <SSHBtn ip={cmp.ip} hovered={cmp.hovered} />
+            <VNCBtn ip={cmp.ip} hovered={cmp.hovered} />
           </div>
         </td>
         <td className="py-2 px-4">
@@ -140,18 +153,6 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
         <td className="py-2 px-4">{cmp.user_phone}</td>
         <td className="py-2 px-4">{cmp.department}</td>
         <td className="py-2 px-4">{cmp.room}</td>
-        <div className="w-0" />
-        <td
-          className={clsx(
-            cmp.notScrolledOnRight ? '' : 'bl',
-            'sticky right-0 bg-inherit py-2 px-4'
-          )}
-        >
-          <div className="flex gap-2 ">
-            <SSHBtn ip={cmp.ip} hovered={cmp.hovered} />
-            <VNCBtn ip={cmp.ip} hovered={cmp.hovered} />
-          </div>
-        </td>
       </tr>
     </>
   )

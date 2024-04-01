@@ -31,7 +31,7 @@ export const ComputersList = (): JSX.Element => {
   return (
     <>
       <div
-        className="relative m-2 h-full max-w-full overflow-x-auto overscroll-y-auto rounded-lg border-2 border-gray-300 shadow-md 
+        className="flex-1 relative m-2 h-full max-w-full overflow-x-auto overscroll-y-auto rounded-lg border-2 border-gray-300 shadow-md 
       transition-all scrollbar-thin scrollbar-track-slate-300/50 scrollbar-thumb-slate-500 scrollbar-track-rounded-full scrollbar-thumb-rounded-full hover:scrollbar-track-slate-300"
       >
         <table className="w-full border-collapse border-slate-400  text-sm ">
@@ -84,13 +84,6 @@ export const ComputersList = (): JSX.Element => {
                 className="sticky top-0 w-80  whitespace-nowrap border-slate-400 py-4  px-6"
               >
                 Кабинет
-              </th>
-              <div ref={rightRef} className={'sticky top-0 w-0'} />
-              <th
-                scope="col"
-                className="sticky top-0 right-0 w-96 whitespace-nowrap rounded-tr-lg bg-slate-200 py-4  px-6"
-              >
-                Подключения
               </th>
             </tr>
           </thead>
