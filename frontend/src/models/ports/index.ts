@@ -1,66 +1,55 @@
 import { createStore, createEvent, createEffect } from 'effector'
-import { CheckSSH, CheckVNC } from '../../../wailsjs/go/main/Ports'
+import { debug } from 'patronum'
+import { main } from '../../../wailsjs/go/models'
+import { CheckSSH, CheckVNC } from '../../../wailsjs/go/main/Computer'
 
-interface PortStatus {
-  ip: string
+
+interface NodeStatus {
+  id: string
   status?: 'online' | 'offline'
 }
 
-type PortStatuses = Array<PortStatus>
-
 export interface NodeState {
-  node_name: string
-  status: 'online' | 'offline' | undefined
+  id: string
+  vnc_status: 'online' | 'offline' | undefined
+  ssh_status: 'online' | 'offline' | undefined
 }
 export type NodesState = Array<NodeState>
 
-export const $vncList = createStore<PortStatuses>([])
 
 export const checkVNC = createEvent<string>()
-
-export const checkVNCFx = createEffect(async (ip: string) => {
-  const res = await CheckVNC(ip)
-  console.log(res)
-  const data: PortStatus = {
-    ip,
-    status: res ? 'online' : 'offline',
+export const checkVNCFx = createEffect(async (id: string) => {
+  const res = await CheckVNC(id)
+  console.log('vnc', res)
+  const data: NodeStatus = {
+    id,
+    status: res.available ? 'online' : 'offline',
   }
   return data
 })
+export const emitVNCStatus = createEvent<NodeStatus>()
 
-export const checkVNCForAllNodes = createEvent()
-export const checkVNCForAllNodesFx = createEffect(
-  async (ips: Array<string>) => {
-    ips.forEach((ip) => {
-      ip.split(', ').forEach((v) => checkVNC(v))
-    })
-    //
-  }
-)
 
-export const $sshList = createStore<PortStatuses>([])
 export const checkSSH = createEvent<string>()
-export const checkSSHFx = createEffect(async (ip: string) => {
-  const res = await CheckSSH(ip)
-  const data: PortStatus = {
-    ip,
-    status: res ? 'online' : 'offline',
+export const checkSSHFx = createEffect(async (id: string) => {
+  const res = await CheckSSH(id)
+  console.log('ssh', res)
+  const data: NodeStatus= {
+    id,
+    status: res.available ? 'online' : 'offline',
   }
   return data
 })
+export const emitSSHStatus = createEvent<NodeStatus>()
 
-export const checkSSHForAllNodesFx = createEffect(
-  async (ips: Array<string>) => {
-    ips.forEach((ip) => {
-      ip.split(', ').forEach((v) => checkSSH(v))
-    })
-  }
-)
 
-export const refreshStatuses = createEvent()
-setInterval(() => refreshStatuses(), 10 * 60 * 1000)
+// export const refreshStatuses = createEvent()
+// setInterval(() => refreshStatuses(), 10 * 60 * 1000)
 
-export const $nodesState = createStore<NodesState>([])
+export const $nodesState = createStore<NodesState>([], { name: "nodes_state" })
 
-export const $availableCount = $nodesState.map(s=>s.filter(v=>v.status==='online').length)
-export const $unavailableCount = $nodesState.map(s=>s.filter(v=>v.status==='offline').length)
+export const $availableCount = $nodesState.map(s => s.filter(v => v.vnc_status === 'online' || v.ssh_status === 'online').length)
+export const $unavailableCount = $nodesState.map(s => s.filter(v => v.vnc_status === 'offline' && v.ssh_status == 'offline').length)
+
+
+debug($nodesState)

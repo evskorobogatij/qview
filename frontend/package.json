@@ -14,7 +14,7 @@
     "clsx": "^1.2.1",
     "effector": "^22.4.0",
     "effector-react": "^22.3.4",
-    "patronum": "^1.12.3",
+    "patronum": "^2.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

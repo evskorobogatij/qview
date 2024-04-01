@@ -1,10 +1,14 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type ComputerItem struct {
@@ -27,14 +31,16 @@ type ComputerItem struct {
 }
 
 type Computer struct {
-	settings *Settings
+	settings  *Settings
+	computers []ComputerItem
+	ctx       context.Context
 }
 
 func NewCmp() *Computer {
-	return &Computer{}
+	return &Computer{computers: []ComputerItem{}}
 }
 
-func (cmp *Computer) LoadComputers() []ComputerItem {
+func (cmp *Computer) LoadComputers() {
 	resp, err := http.Get(cmp.settings.Url)
 	if err != nil {
 		log.Println(err)
@@ -45,9 +51,114 @@ func (cmp *Computer) LoadComputers() []ComputerItem {
 		log.Println(err)
 	}
 
-	computers := []ComputerItem{}
-	json.Unmarshal(body, &computers)
+	json.Unmarshal(body, &cmp.computers)
+}
 
-	return computers
+func (cmp *Computer) GetComputersList() []ComputerItem {
+	return cmp.computers
+}
 
+type NodeStatus struct {
+	ID        string `json:"id"`
+	Available bool   `json:"available"`
+}
+
+func (cmp *Computer) CheckAllVNC() {
+	fmt.Printf("CHECK ALL VNC\n")
+
+	ch := make(chan struct{}, 200)
+
+	for _, v := range cmp.computers {
+
+		ch <- struct{}{}
+		go func(info ComputerItem) {
+
+			ips := findIPv4(info.Ip)
+			available := false
+			for _, ip := range ips {
+				f := checkPort(ip, 5900)
+				if f {
+					available = true
+					break
+				}
+			}
+			if cmp.ctx != nil {
+				runtime.EventsEmit(cmp.ctx, "sendVNCStatus", &NodeStatus{ID: info.Id, Available: available})
+			}
+
+			<-ch
+		}(v)
+	}
+}
+
+func (cmp *Computer) CheckAllSSH() {
+	fmt.Printf("CHECK ALL SSH\n")
+
+	ch := make(chan struct{}, 200)
+
+	for _, v := range cmp.computers {
+
+		ch <- struct{}{}
+		go func(info ComputerItem) {
+
+			ips := findIPv4(info.Ip)
+			available := false
+			for _, ip := range ips {
+				f := checkPort(ip, 22)
+				if f {
+					available = true
+					break
+				}
+			}
+			if cmp.ctx != nil {
+				runtime.EventsEmit(cmp.ctx, "sendSSHStatus", &NodeStatus{ID: info.Id, Available: available})
+			}
+
+			<-ch
+		}(v)
+	}
+}
+
+func (cmp *Computer) CheckVNC(id string) NodeStatus {
+	var item ComputerItem
+	for _, v := range cmp.computers {
+		if v.Id == id {
+			item = v
+			break
+		}
+	}
+
+	ips := findIPv4(item.Ip)
+	available := false
+	for _, ip := range ips {
+		f := checkPort(ip, 5900)
+		if f {
+			available = true
+			break
+		}
+	}
+
+	return NodeStatus{ID: id, Available: available}
+}
+
+func (cmp *Computer) CheckSSH(id string) NodeStatus {
+	var item ComputerItem
+	for _, v := range cmp.computers {
+		if v.Id == id {
+			item = v
+			break
+		}
+	}
+
+	ips := findIPv4(item.Ip)
+	available := false
+	for _, ip := range ips {
+		f := checkPort(ip, 22)
+		if f {
+			available = true
+			break
+		}
+	}
+
+	return NodeStatus{ID: id, Available: available}
 }

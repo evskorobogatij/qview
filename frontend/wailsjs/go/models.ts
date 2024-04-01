@@ -42,6 +42,20 @@ export namespace main {
 	        this.updated_at = source["updated_at"];
 	    }
 	}
+	export class NodeStatus {
+	    id: string;
+	    available: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new NodeStatus(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.available = source["available"];
+	    }
+	}
 
 }
 

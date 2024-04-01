@@ -14,17 +14,18 @@ var assets embed.FS
 
 func main() {
 	// Create an instance of the app structure
-	app := NewApp()
 
 	settings := loadConfig()
 	fmt.Printf("DATA URL IS %s \n", settings.Url)
-	app.settings = settings
 
 	computer := NewCmp()
 	computer.settings = settings
 
 	connections := &Connections{}
 	connections.settings = settings
+
+	app := NewApp(computer)
+	app.settings = settings
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -42,7 +43,7 @@ func main() {
 			computer,
 			&ComputerItem{},
 			connections,
-			&Ports{},
+			// &Ports{},
 		},
 	})
 
