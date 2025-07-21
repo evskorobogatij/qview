@@ -1,4 +1,4 @@
-import { useStore, useEvent } from 'effector-react'
+import { useUnit } from 'effector-react'
 import { computers } from '@wails/go/models'
 import { $nodesState, checkSSH, checkVNC } from '@/models/ports'
 import { $searchRegExp } from '@/models/search'
@@ -18,10 +18,10 @@ interface ComputerRowItemProps extends computers.ComputerItem {
 }
 
 export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
-  const nodeStates = useStore($nodesState)
-  const searchRegExp = useStore($searchRegExp)
-  const handleCheckVNC = useEvent(checkVNC)
-  const handleCheckSSH = useEvent(checkSSH)
+  const nodeStates = useUnit($nodesState)
+  const searchRegExp = useUnit($searchRegExp)
+  const handleCheckVNC = useUnit(checkVNC)
+  const handleCheckSSH = useUnit(checkSSH)
 
   const handleHovered = useCallback(() => cmp.onHovered(cmp.id), [cmp])
   const handleLeave = useCallback(() => cmp.onLeave, [cmp.onLeave])

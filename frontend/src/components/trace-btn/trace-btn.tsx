@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useEvent } from 'effector-react'
+import { useUnit } from 'effector-react'
 import { showTracertMenu } from '@/models/connections'
 import { useCallback, useMemo } from 'react'
 import { startTraceroute } from '@/models/traceroute'
@@ -10,13 +10,13 @@ interface TraceBtnProps {
 }
 
 export const TraceBtn = ({ hovered, ip }: TraceBtnProps) => {
-  const handleStartTraceroute = useEvent(startTraceroute)
+  const handleStartTraceroute = useUnit(startTraceroute)
   const onClick = useCallback(() => {
     handleStartTraceroute(ip)
   }, [ip, handleStartTraceroute])
 
   const ipList = useMemo(() => ip.split(', '), [ip])
-  const showMenu = useEvent(showTracertMenu)
+  const showMenu = useUnit(showTracertMenu)
 
   const handleShowMenu = useCallback(() => {
     showMenu(ipList)

@@ -1,13 +1,13 @@
-import { useEvent, useStore } from 'effector-react'
+import { useUnit } from 'effector-react'
 import { useCallback } from 'react'
 import { connectBySSH } from '@/models/connections'
 import { $ipListSSH, hideSSHMenu } from '@/models/node_menu'
 
 export const SSHMenu = (): JSX.Element => {
-  const hideMenu = useEvent(hideSSHMenu)
+  const hideMenu = useUnit(hideSSHMenu)
 
-  const handleConnectBySSH = useEvent(connectBySSH)
-  const ipList = useStore($ipListSSH)
+  const handleConnectBySSH = useUnit(connectBySSH)
+  const ipList = useUnit($ipListSSH)
 
   const onClickInMenu = useCallback(
     (ip: string) => {

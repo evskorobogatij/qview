@@ -1,6 +1,6 @@
 import { clsx } from 'clsx'
 import { connectBySSH } from '@/models/connections'
-import { useEvent } from 'effector-react'
+import { useUnit } from 'effector-react'
 import { useCallback, useMemo } from 'react'
 import { showSSHMenu } from '@/models/node_menu'
 
@@ -10,13 +10,13 @@ interface SSHBtnProps {
 }
 
 export const SSHBtn = ({ ip, hovered }: SSHBtnProps): JSX.Element => {
-  const handleConnectBySSH = useEvent(connectBySSH)
+  const handleConnectBySSH = useUnit(connectBySSH)
   const onClick = useCallback(() => {
     handleConnectBySSH(ip)
   }, [ip, handleConnectBySSH])
 
   const ipList = useMemo(() => ip.split(', '), [ip])
-  const showMenu = useEvent(showSSHMenu)
+  const showMenu = useUnit(showSSHMenu)
 
   const handleShowMenu = useCallback(() => {
     showMenu(ipList)

@@ -1,15 +1,15 @@
-import { useEvent, useStore } from 'effector-react'
+import { useUnit } from 'effector-react'
 import { useCallback } from 'react'
 import { connectByVNC } from '@/models/connections'
 import { $ipList, hideVNCMenu } from '@/models/node_menu'
 
 export const VNCMenu = (): JSX.Element => {
-  const hide = useEvent(hideVNCMenu)
+  const hide = useUnit(hideVNCMenu)
   const hideMenu = useCallback(() => hide(), [hide])
 
-  const handleConnectByVNC = useEvent(connectByVNC)
+  const handleConnectByVNC = useUnit(connectByVNC)
 
-  const ipList = useStore($ipList)
+  const ipList = useUnit($ipList)
 
   const onClickInMenu = useCallback(
     (ip: string) => {

@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react'
-import { useStore, useEvent } from 'effector-react'
+import { useUnit } from 'effector-react'
 import { $search, $searching, searchChanged } from '@/models/search'
 
 export const Search = (): JSX.Element => {
-  const search = useStore($search)
-  const searching = useStore($searching)
-  const handleSearch = useEvent(searchChanged)
+  const search = useUnit($search)
+  const searching = useUnit($searching)
+  const handleSearch = useUnit(searchChanged)
 
   const onSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

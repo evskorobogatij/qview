@@ -1,4 +1,4 @@
-import { useEvent, useStore } from 'effector-react'
+import { useUnit } from 'effector-react'
 import {
   $tracerouteTarget,
   $tracing,
@@ -7,10 +7,10 @@ import {
 } from '@/models/traceroute'
 
 export const TraceView = () => {
-  const target = useStore($tracerouteTarget)
-  const tracing = useStore($tracing)
-  const tracingHistory = useStore($tracingHistory)
-  const hideTraceView = useEvent(hideTraceRouteView)
+  const target = useUnit($tracerouteTarget)
+  const tracing = useUnit($tracing)
+  const tracingHistory = useUnit($tracingHistory)
+  const hideTraceView = useUnit(hideTraceRouteView)
   // const hideMenu  =
 
   return (

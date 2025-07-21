@@ -1,4 +1,4 @@
-import { useEvent, useStore } from 'effector-react'
+import { useUnit } from 'effector-react'
 import {
   $ipListTrace,
   hideTracertMenu,
@@ -7,10 +7,10 @@ import { useCallback } from 'react'
 import { startTraceroute } from '@/models/traceroute'
 
 export const TracertMenu = () => {
-  const hideMenu = useEvent(hideTracertMenu)
+  const hideMenu = useUnit(hideTracertMenu)
 
-  const handleTrace = useEvent(startTraceroute)
-  const ipList = useStore($ipListTrace)
+  const handleTrace = useUnit(startTraceroute)
+  const ipList = useUnit($ipListTrace)
 
   const onClickInMenu = useCallback(
     (ip: string) => {

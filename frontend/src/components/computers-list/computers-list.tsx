@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useStore } from 'effector-react'
+import { useUnit } from 'effector-react'
 import { useState, useCallback } from 'react'
 import { useElementInView } from '@/lib/hooks'
 import { $activeSSHMenu, $activeVNCMenu } from '@/models/node_menu'
@@ -14,7 +14,7 @@ import { $tracingWindowShow } from '@/models/traceroute'
 import { $activeTraceMenu } from '@/models/connections'
 
 export const ComputersList = (): JSX.Element => {
-  const computers = useStore($findedComputers)
+  const computers = useUnit($findedComputers)
   const [curretPC, setCurrentPC] = useState<string>('')
 
   const handleComputerItemHover = useCallback(
@@ -23,10 +23,10 @@ export const ComputersList = (): JSX.Element => {
   )
   const handleComputerItemLeave = useCallback(() => setCurrentPC(''), [])
 
-  const activeVNCMenu = useStore($activeVNCMenu)
-  const activeSSHMenu = useStore($activeSSHMenu)
-  const activeTracertMenu = useStore($activeTraceMenu)
-  const tracingWindowShow = useStore($tracingWindowShow)
+  const activeVNCMenu = useUnit($activeVNCMenu)
+  const activeSSHMenu = useUnit($activeSSHMenu)
+  const activeTracertMenu = useUnit($activeTraceMenu)
+  const tracingWindowShow = useUnit($tracingWindowShow)
 
   const { containerRef, isVisible: notStrolled } = useElementInView()
 

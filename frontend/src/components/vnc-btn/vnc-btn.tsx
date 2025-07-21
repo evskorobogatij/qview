@@ -1,6 +1,6 @@
 import { clsx } from 'clsx'
 import { connectByVNC } from '@/models/connections'
-import { useEvent } from 'effector-react'
+import { useUnit } from 'effector-react'
 import { useCallback, useMemo } from 'react'
 import { showVNCMenu } from '@/models/node_menu'
 
@@ -10,13 +10,13 @@ interface VNCBtnProps {
 }
 
 export const VNCBtn = ({ ip, hovered }: VNCBtnProps): JSX.Element => {
-  const handleConnectByVNC = useEvent(connectByVNC)
+  const handleConnectByVNC = useUnit(connectByVNC)
   const onClick = useCallback(() => {
     handleConnectByVNC(ip)
   }, [ip, handleConnectByVNC])
 
   const ipList = useMemo(() => ip.split(', '), [ip])
-  const showMenu = useEvent(showVNCMenu)
+  const showMenu = useUnit(showVNCMenu)
 
   const handleShowMenu = useCallback(() => {
     showMenu(ipList)
