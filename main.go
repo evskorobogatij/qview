@@ -24,8 +24,11 @@ func main() {
 	connections := &Connections{}
 	connections.settings = settings
 
+	traceroute := &Traceroute{}
+
 	app := NewApp(computer)
 	app.settings = settings
+	app.tracert = traceroute
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -43,6 +46,9 @@ func main() {
 			computer,
 			&ComputerItem{},
 			connections,
+			traceroute,
+			&TracertedNode{},
+			&Result{},
 			// &Ports{},
 		},
 	})

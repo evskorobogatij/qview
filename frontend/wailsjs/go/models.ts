@@ -56,6 +56,34 @@ export namespace main {
 	        this.available = source["available"];
 	    }
 	}
+	export class Result {
+	    IP: string;
+	    HOP: number;
+	    TimeElapsedMS: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new Result(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.IP = source["IP"];
+	        this.HOP = source["HOP"];
+	        this.TimeElapsedMS = source["TimeElapsedMS"];
+	    }
+	}
+	export class TracertedNode {
+	    Host: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new TracertedNode(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.Host = source["Host"];
+	    }
+	}
 
 }
 

@@ -1,8 +1,11 @@
-import { createEvent, createEffect } from 'effector'
+import { createEvent, createEffect, createStore } from 'effector'
 import {
   ConnectByVNC,
   ConnectBySSH,
 } from '../../../wailsjs/go/main/Connections'
+import { CheckPath } from '../../../wailsjs/go/main/Traceroute'
+import { EventsOn } from '../../../wailsjs/runtime/runtime'
+import { main } from '../../../wailsjs/go/models'
 
 export const connectByVNC = createEvent<string>()
 export const connectBySSH = createEvent<string>()
@@ -14,3 +17,10 @@ export const connectByVNCFx = createEffect(async (host: string) => {
 export const connectBySSHFx = createEffect(async (host: string) => {
   await ConnectBySSH(host)
 })
+
+export const $ipListTrace = createStore<Array<string>>([])
+export const $activeTraceMenu = $ipListTrace.map((list) => list.length > 0)
+export const showTracertMenu = createEvent<Array<string>>()
+export const hideTracertMenu = createEvent()
+
+

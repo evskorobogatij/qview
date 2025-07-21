@@ -9,6 +9,7 @@ type App struct {
 	ctx       context.Context
 	settings  *Settings
 	computers *Computer
+	tracert   *Traceroute
 }
 
 // NewApp creates a new App application struct
@@ -21,6 +22,7 @@ func NewApp(computers *Computer) *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	a.computers.ctx = ctx
+	a.tracert.ctx = ctx
 }
 
 func (a *App) LoadDataUrl() string {

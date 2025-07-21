@@ -1,5 +1,14 @@
 import { sample } from 'effector'
-import { connectBySSH, connectBySSHFx, connectByVNC, connectByVNCFx } from '.'
+import {
+  $ipListTrace,
+  connectBySSH,
+  connectBySSHFx,
+  connectByVNC,
+  connectByVNCFx,
+  hideTracertMenu,
+  showTracertMenu,
+
+} from '.'
 
 sample({
   clock: connectByVNC,
@@ -9,4 +18,18 @@ sample({
 sample({
   clock: connectBySSH,
   target: connectBySSHFx,
+})
+
+
+
+
+sample({
+  clock: showTracertMenu,
+  target: $ipListTrace
+})
+
+sample({
+  clock: hideTracertMenu,
+  fn: () => [],
+  target: $ipListTrace
 })

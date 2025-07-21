@@ -6,6 +6,7 @@ import { SSHBtn } from '../SSHBtn'
 import { VNCBtn } from '../VNCBtn'
 import { useCallback, useMemo } from 'react'
 import { clsx } from 'clsx'
+import { TraceBtn } from '../trace_btn/trace_btn'
 
 interface ComputerRowItemProps extends main.ComputerItem {
   onHovered: (id: string) => void
@@ -28,9 +29,9 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
     () =>
       searchRegExp.source !== '(?:)'
         ? cmp.node_name.replace(
-          searchRegExp,
-          '<mark class="bg-blue-500 text-white">$&</mark>'
-        )
+            searchRegExp,
+            '<mark class="bg-blue-500 text-white">$&</mark>'
+          )
         : cmp.node_name,
     [cmp.node_name, searchRegExp]
   )
@@ -39,9 +40,9 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
     () =>
       searchRegExp.source !== '(?:)'
         ? cmp.serialnumber.replace(
-          searchRegExp,
-          '<mark class="bg-blue-500 text-white">$&</mark>'
-        )
+            searchRegExp,
+            '<mark class="bg-blue-500 text-white">$&</mark>'
+          )
         : cmp.serialnumber,
     [cmp.serialnumber, searchRegExp]
   )
@@ -50,9 +51,9 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
     () =>
       searchRegExp.source !== '(?:)'
         ? cmp.ip.replace(
-          searchRegExp,
-          '<mark class="bg-blue-500 text-white">$&</mark>'
-        )
+            searchRegExp,
+            '<mark class="bg-blue-500 text-white">$&</mark>'
+          )
         : cmp.ip,
     [cmp.ip, searchRegExp]
   )
@@ -61,9 +62,9 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
     () =>
       searchRegExp.source !== '(?:)'
         ? cmp.fio_user.replace(
-          searchRegExp,
-          '<mark class="bg-blue-500 text-white">$&</mark>'
-        )
+            searchRegExp,
+            '<mark class="bg-blue-500 text-white">$&</mark>'
+          )
         : cmp.fio_user,
     [cmp.fio_user, searchRegExp]
   )
@@ -71,7 +72,7 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
   const ipList = useMemo(() => cmp.ip.split(', '), [cmp.ip])
 
   const status = useMemo(() => {
-    const state = nodeStates.find(s => s.id === cmp.id)
+    const state = nodeStates.find((s) => s.id === cmp.id)
     if (state === undefined) return undefined
     else {
       if (state.ssh_status === 'online' || state.vnc_status === 'online') {
@@ -127,6 +128,7 @@ export const ComputerRowItem = (cmp: ComputerRowItemProps) => {
 
             <SSHBtn ip={cmp.ip} hovered={cmp.hovered} />
             <VNCBtn ip={cmp.ip} hovered={cmp.hovered} />
+            <TraceBtn ip={cmp.ip} hovered={cmp.hovered} />
           </div>
         </td>
         <td className="py-2 px-4">

@@ -7,6 +7,10 @@ import { $findedComputers } from '../../models/search'
 import { SSHMenu } from '../SSHMenu'
 import { VNCMenu } from '../VNCMenu'
 import { ComputerRowItem } from './ComputerRowItem'
+import { $activeTraceMenu } from '../../models/connections'
+import { TracertMenu } from '../trace_menu'
+import { $tracingWindowShow } from '../../models/traceroute'
+import { TraceView } from '../trace_view'
 
 export const ComputersList = (): JSX.Element => {
   const computers = useStore($findedComputers)
@@ -20,6 +24,8 @@ export const ComputersList = (): JSX.Element => {
 
   const activeVNCMenu = useStore($activeVNCMenu)
   const activeSSHMenu = useStore($activeSSHMenu)
+  const activeTracertMenu = useStore($activeTraceMenu)
+  const tracingWindowShow = useStore($tracingWindowShow)
 
   const { containerRef, isVisible: notStrolled } = useElementInView()
 
@@ -31,7 +37,7 @@ export const ComputersList = (): JSX.Element => {
   return (
     <>
       <div
-        className="flex-1 relative m-2 h-full max-w-full overflow-x-auto overscroll-y-auto rounded-lg border-2 border-gray-300 shadow-md 
+        className="relative m-2 h-full max-w-full flex-1 overflow-x-auto overscroll-y-auto rounded-lg border-2 border-gray-300 shadow-md 
       transition-all scrollbar-thin scrollbar-track-slate-300/50 scrollbar-thumb-slate-500 scrollbar-track-rounded-full scrollbar-thumb-rounded-full hover:scrollbar-track-slate-300"
       >
         <table className="w-full border-collapse border-slate-400  text-sm ">
@@ -106,6 +112,8 @@ export const ComputersList = (): JSX.Element => {
 
       {activeVNCMenu && <VNCMenu />}
       {activeSSHMenu && <SSHMenu />}
+      {activeTracertMenu && <TracertMenu />}
+      {tracingWindowShow && <TraceView />}
     </>
   )
 }
