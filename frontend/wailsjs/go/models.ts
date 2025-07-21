@@ -1,4 +1,4 @@
-export namespace main {
+export namespace computers {
 	
 	export class ComputerItem {
 	    id: string;
@@ -56,6 +56,11 @@ export namespace main {
 	        this.available = source["available"];
 	    }
 	}
+
+}
+
+export namespace traceroute {
+	
 	export class Result {
 	    IP: string;
 	    HOP: number;

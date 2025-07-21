@@ -4,7 +4,7 @@ import {
   $tracing,
   $tracingHistory,
   hideTraceRouteView,
-} from '../../models/traceroute'
+} from '@/models/traceroute'
 
 export const TraceView = () => {
   const target = useStore($tracerouteTarget)

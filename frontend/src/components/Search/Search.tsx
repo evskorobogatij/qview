@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { useStore, useEvent } from 'effector-react'
-import { $search, $searching, searchChanged } from '../../models/search'
+import { $search, $searching, searchChanged } from '@/models/search'
 
 export const Search = (): JSX.Element => {
   const search = useStore($search)

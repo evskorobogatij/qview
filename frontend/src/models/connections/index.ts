@@ -2,10 +2,8 @@ import { createEvent, createEffect, createStore } from 'effector'
 import {
   ConnectByVNC,
   ConnectBySSH,
-} from '../../../wailsjs/go/main/Connections'
-import { CheckPath } from '../../../wailsjs/go/main/Traceroute'
-import { EventsOn } from '../../../wailsjs/runtime/runtime'
-import { main } from '../../../wailsjs/go/models'
+} from '@wails/go/connections/Connections'
+
 
 export const connectByVNC = createEvent<string>()
 export const connectBySSH = createEvent<string>()

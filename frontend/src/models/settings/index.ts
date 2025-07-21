@@ -1,6 +1,6 @@
 import { createEvent, createStore, createEffect } from 'effector'
 import { createGate } from 'effector-react'
-import { LoadDataUrl } from '../../../wailsjs/go/main/App'
+import { LoadDataUrl } from '@wails/go/app/App'
 
 export const $dataUrl = createStore<string>('')
 

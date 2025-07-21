@@ -1,11 +1,11 @@
 import { createStore, createEffect, createEvent } from 'effector'
-import { CheckAllSSH, CheckAllVNC, GetComputersList, LoadComputers } from '../../../wailsjs/go/main/Computer'
-import { main } from '../../../wailsjs/go/models'
+import { CheckAllSSH, CheckAllVNC, GetComputersList, LoadComputers } from '@wails/go/computers/Computer'
+import { computers  } from '@wails/go/models'
 
-import { EventsOn } from '../../../wailsjs/runtime'
+import { EventsOn } from '@wails/runtime'
 import { emitSSHStatus, emitVNCStatus } from '../ports'
 
-export const $computers = createStore<main.ComputerItem[] | null>(null)
+export const $computers = createStore<computers.ComputerItem[] | null>(null)
 
 export const getComputersFx = createEffect(async () => {
   //
@@ -34,14 +34,14 @@ export const checkSSHForAllNodesFx = createEffect(async () => {
   await CheckAllSSH()
 })
 
-EventsOn("sendVNCStatus", (data: main.NodeStatus) => {
+EventsOn("sendVNCStatus", (data: computers.NodeStatus) => {
   emitVNCStatus({
     id: data.id, status: data.available
       ? 'online' : 'offline'
   })
 })
 
-EventsOn("sendSSHStatus", (data: main.NodeStatus) => {
+EventsOn("sendSSHStatus", (data: computers.NodeStatus) => {
   emitSSHStatus({
     id: data.id, status: data.available
       ? 'online' : 'offline'

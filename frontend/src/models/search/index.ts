@@ -1,10 +1,10 @@
 import { createStore, createEvent, createEffect } from 'effector'
 import { debounce } from 'patronum/debounce'
-import { main } from '../../../wailsjs/go/models'
+import { computers } from '@wails/go/models'
 
 interface ComputersSearchProps {
   search: string
-  computers: main.ComputerItem[] | null
+  computers: computers.ComputerItem[] | null
 }
 
 export const $search = createStore<string>('')
@@ -28,4 +28,4 @@ export const searchFx = createEffect(
 
 export const $searching = searchFx.pending.map((pending) => pending)
 
-export const $findedComputers = createStore<main.ComputerItem[] | null>(null)
+export const $findedComputers = createStore<computers.ComputerItem[] | null>(null)

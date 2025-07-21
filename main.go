@@ -3,7 +3,16 @@ package main
 import (
 	"embed"
 	"fmt"
+	"os"
 
+	"qviewapp/core/app"
+	"qviewapp/core/computers"
+	"qviewapp/core/connections"
+	"qviewapp/core/consts"
+	"qviewapp/core/settings"
+	"qviewapp/core/traceroute"
+
+	"github.com/spf13/viper"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -15,23 +24,25 @@ var assets embed.FS
 func main() {
 	// Create an instance of the app structure
 
-	settings := loadConfig()
-	fmt.Printf("DATA URL IS %s \n", settings.Url)
+	err := settings.LoadConfig()
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+		os.Exit(-1)
+	}
+	// settings := settings.LoadConfig()
+	url := viper.GetString(consts.SETTING_URL)
+	fmt.Printf("DATA URL IS %s \n", url)
 
-	computer := NewCmp()
-	computer.settings = settings
+	computer := computers.NewCmp()
 
-	connections := &Connections{}
-	connections.settings = settings
+	connections := &connections.Connections{}
 
-	traceroute := &Traceroute{}
+	traceroute := &traceroute.Traceroute{}
 
-	app := NewApp(computer)
-	app.settings = settings
-	app.tracert = traceroute
+	app := app.NewApp(computer, traceroute)
 
 	// Create application with options
-	err := wails.Run(&options.App{
+	err = wails.Run(&options.App{
 		Title:  "Утилита удаленного подключения",
 		Width:  1280,
 		Height: 768,
@@ -39,16 +50,14 @@ func main() {
 			Assets: assets,
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
-		OnStartup:        app.startup,
+		OnStartup:        app.Startup,
 		Bind: []interface{}{
 			app,
-			&Settings{},
 			computer,
-			&ComputerItem{},
+			&computers.ComputerItem{},
 			connections,
 			traceroute,
-			&TracertedNode{},
-			&Result{},
+
 			// &Ports{},
 		},
 	})

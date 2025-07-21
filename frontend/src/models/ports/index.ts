@@ -1,7 +1,6 @@
 import { createStore, createEvent, createEffect } from 'effector'
 import { debug } from 'patronum'
-import { main } from '../../../wailsjs/go/models'
-import { CheckSSH, CheckVNC } from '../../../wailsjs/go/main/Computer'
+import { CheckSSH, CheckVNC } from '@wails/go/computers/Computer'
 
 
 interface NodeStatus {
